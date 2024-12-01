@@ -74,7 +74,7 @@ func postSignIn(c *gin.Context) {
 	// Execute Query
 	row := database.DB.QueryRow(query, user.Username, user.Password)
 	var dbUsername, dbPassword string
-	err = row.Scan(dbUsername, dbPassword)
+	err = row.Scan(&dbUsername, &dbPassword)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password"})
@@ -94,5 +94,25 @@ func postSignIn(c *gin.Context) {
 }
 
 func postSignUp(c *gin.Context) {
+	var user models.Users
+	var err error
+	err = c.ShouldBindJSON(&user)
+	if err != nil {
+		log.Println("Error: ", err)
+		c.JSON(http.StatusBadRequest, err)
+	}
+
+	if user.Email == "" || user.Password == "" || user.Username == "" {
+		c.JSON(http.StatusBadRequest, "Username, email, and password are required inputs")
+	}
+
+	query := "INSERT INTO users (username, email, password) VALUES ($1, $2, $3)"
+	_, err = database.DB.Exec(query, user.Username, user.Email, user.Password)
+	if err != nil {
+		log.Printf("Error inserting user: %v", err)
+		c.JSON(http.StatusInternalServerError, err)
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Sign up successful"})
 
 }

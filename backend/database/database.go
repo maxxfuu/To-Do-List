@@ -13,11 +13,11 @@ var DB *sqlx.DB // Global representation of a Database
 func InitDB() {
 	connString := fmt.Sprintf(
 		"postgres://%s:%s@%s:%s/%s?sslmode=disable",
-		"postgres",
-		"",
-		"localhost",
-		"5432",
-		"postgres")
+		"postgres",  // Username
+		"",          // Password
+		"localhost", // Host
+		"5432",      // Port
+		"tdlist")    // Database name
 
 	var err error
 
