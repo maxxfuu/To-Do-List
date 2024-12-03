@@ -10,11 +10,11 @@ func SetUpRouter() *gin.Engine {
 	router := gin.Default()
 
 	// auth_handler
-	router.POST("signin", postSignIn) // *
+	router.POST("/signin", postSignIn)
 	router.POST("/signup", postSignUp)
+	router.DELETE("/users/:username", deleteUser)
 
 	// task_handler
-	router.GET("/task", getTask)
 	router.POST("/task", postTask)
 	router.PUT("/task", putTask)
 	router.DELETE("/task", deleteTask)

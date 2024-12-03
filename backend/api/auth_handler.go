@@ -90,7 +90,6 @@ func postSignIn(c *gin.Context) {
 	if err == nil {
 		c.JSON(http.StatusCreated, token)
 	}
-
 }
 
 func postSignUp(c *gin.Context) {
@@ -114,5 +113,31 @@ func postSignUp(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Sign up successful"})
+}
 
+func deleteUser(c *gin.Context) {
+	user := c.Param("username")
+	query := "DELETE FROM users WHERE username = $1;"
+
+	result, err := database.DB.Exec(query, user)
+	if err != nil {
+		log.Printf("Database error: %v", err)
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Printf("Error checking rows affected: %v", err)
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	if rowsAffected == 0 {
+		log.Printf("Username not found: %v", err)
+		c.JSON(http.StatusNotFound, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Deleted User successfully", "user": user})
 }
