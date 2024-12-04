@@ -1,7 +1,6 @@
 CREATE TABLE tasks (
-    -- UserID  INT NOT NULL REFERENCES users(UserID),
-
-    TaskID  SERIAL NOT NULLPRIMARY KEY,
+	TaskID  SERIAL NOT NULL PRIMARY KEY,
+    UserID  INT NOT NULL REFERENCES users(userID),
 	Title   TEXT NOT NULL,
 	Content TEXT,
 	Status  TEXT DEFAULT 'pending',

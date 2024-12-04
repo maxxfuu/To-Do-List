@@ -116,7 +116,7 @@ func postSignUp(c *gin.Context) {
 }
 
 func deleteUser(c *gin.Context) {
-	user := c.Param("username")
+	user := c.Param("username") // assigns user through Extracting data through URL /users/:username
 	query := "DELETE FROM users WHERE username = $1;"
 
 	result, err := database.DB.Exec(query, user)

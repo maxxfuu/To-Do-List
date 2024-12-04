@@ -1,6 +1,6 @@
 package models
 
-type task struct {
+type Task struct {
 	TaskID  int
 	UserID  int
 	Title   string
