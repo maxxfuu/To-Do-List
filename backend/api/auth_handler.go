@@ -15,7 +15,7 @@ import (
 	"github.com/maxxfuu/To-Do-List/backend/models"
 )
 
-var secretKey = []byte("secret-key")
+var secretKey = []byte("my-secret-api-key")
 
 func createToken(username string, password string) (string, error) {
 	//		create a new JWT token.(signing method, relevant info)
@@ -32,23 +32,6 @@ func createToken(username string, password string) (string, error) {
 	}
 
 	return tokenString, err
-}
-
-func verifyToken(tokenString string) error {
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return secretKey, nil
-	})
-
-	if err != nil {
-		return err
-	}
-
-	if token.Valid != true {
-		return fmt.Errorf("invalid token")
-
-	}
-
-	return nil
 }
 
 func postSignIn(c *gin.Context) {
@@ -140,4 +123,21 @@ func deleteUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Deleted User successfully", "user": user})
+}
+
+func verifyToken(tokenString string) error {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return secretKey, nil
+	})
+
+	if err != nil {
+		return err
+	}
+
+	if token.Valid != true {
+		return fmt.Errorf("invalid token")
+
+	}
+
+	return nil
 }

@@ -10,15 +10,15 @@ import (
 func SetUpRouter() *gin.Engine {
 	router := gin.Default()
 
-	// auth_handler.go, protected routes
-	router.POST("/signin", middleware.JWTAuthentication(), postSignIn)
-	router.POST("/signup", middleware.JWTAuthentication(), postSignUp)
-	router.DELETE("/users/:username", middleware.JWTAuthentication(), deleteUser)
+	// auth_handler.go
+	router.POST("/signup", postSignUp)
+	router.POST("/signin", postSignIn)
+	router.DELETE("/users/:username", middleware.JWTAuthentication(), deleteUser) // protected routes
 
 	// task_handler.go
-	router.POST("/task", middleware.JWTAuthentication(), postTask)
-	router.PUT("/task", middleware.JWTAuthentication(), putTask)
-	router.DELETE("/task", middleware.JWTAuthentication(), deleteTask)
+	router.POST("/task", middleware.JWTAuthentication(), postTask)     // protected routes
+	router.PUT("/task", middleware.JWTAuthentication(), putTask)       // protected routes
+	router.DELETE("/task", middleware.JWTAuthentication(), deleteTask) // protected routes
 
 	return router
 }

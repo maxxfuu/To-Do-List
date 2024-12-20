@@ -2,17 +2,27 @@ package middleware
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/joho/godotenv"
 )
 
-var secretKey = []byte("your-secret-key")
+func init() {
+	err := godotenv.Load("../.env")
+	if err != nil {
+		log.Fatalf("Error Loading .env.%v", err)
+	}
+}
+
+var secretKey = []byte("my-secret-api-key")
 
 // Middleware authentication method that validates JWT Token
 func JWTAuthentication() gin.HandlerFunc {
+
 	return func(c *gin.Context) {
 
 		//Step 1: Extraction. Extract token from the Authorization Header.
@@ -41,7 +51,7 @@ func JWTAuthentication() gin.HandlerFunc {
 		})
 
 		if err != nil || !token.Valid {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired token"})
+			c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 			c.Abort()
 			return
 		}
